@@ -31,7 +31,7 @@ of whatever control variables you want to include in all your models}
 \item{stand_type:}{CPUE standardization model type. The default is to use mgcv to employ GAMs. Another option is to use GLMs}
 }
 \value{
-A list object of models gets outputted into the environment and into the output directory
+A list object of models called model_subsets gets outputted into the environment and into the output directory
 }
 \description{
 CPUE standardization  for all subsets of possible variables

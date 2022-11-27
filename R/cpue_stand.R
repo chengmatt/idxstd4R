@@ -12,7 +12,7 @@
 #'
 #'
 #'
-#' @return A list object of models gets outputted into the environment and into the output directory
+#' @return A list object of models called model_subsets gets outputted into the environment and into the output directory
 #' @export
 #'
 #' @examples

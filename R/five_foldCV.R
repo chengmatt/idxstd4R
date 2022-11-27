@@ -10,7 +10,7 @@
 #' @param stand_type: CPUE standardization model type. The default is to use mgcv to employ GAMs. Another option is to use GLMs
 #' @param seed: Set.seed for 5-fold cross validation
 #'
-#' @return A list object of 5-fold cross validated standardized CPUE models
+#' @return A list object of 5-fold cross validated standardized CPUE models. This object is called all_mods_cv_random
 #' @export
 #'
 #' @examples
