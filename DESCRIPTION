@@ -1,0 +1,19 @@
+Package: idxstd4R
+Title: CPUE Standardization using GAMs with cross validation functionality
+Version: 0.0.0.9000
+Authors@R: 
+    person("Matthew", "Cheng", , "mat.cheng412@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: idxstd4R is a package that standardizes fishery-dependent CPUE data using GAMs to generate an index of abundance.  Currently, the package only includes the use of GAMs for the purpose of index standardization, and allows for k-fold cross validation. This package is tailored for AK Sablefish.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    beepr,
+    doMC,
+    dplyr,
+    here,
+    mgcv,
+    rsample
