@@ -80,9 +80,10 @@ cpue_stand <- function(variables, control_variables, data, dir.models,
       # our output to be a list of model objects
 
     }, error = function(error) {cat("ERROR :",conditionMessage(error), "\n")}) # end try catch statement to overide convergence errors
-  } # End foreach loop
 
-  # Save model objects
-  save(models_subsets, file=file.path(dir.models, model_filename))
+    # Save model objects
+    save(models_subsets, file=file.path(dir.models, model_filename))
+
+  } # End foreach loop
 
 } # end fxn

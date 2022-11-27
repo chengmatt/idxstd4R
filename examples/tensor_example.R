@@ -14,13 +14,13 @@ library(idxstd4R)
 dir.out <- here()
 
 # Create a random dataframe as an example
-data <- data.frame(doy = rpois(5000, 150), AdjLon = rgamma(5000, 5, 3),
-                   lat2 = rgamma(5000, 10, 5), bottom_depth = rgamma(5000, 5000, 10),
-                   gear_descrip = sample(c("LONGLINER", "POT"), replace = TRUE, size = 5000),
-                   area = sample(c("a", "b", "c", replace = TRUE, size = 5000)),
-                   type = sample(c("observer", "logbook"), replace = TRUE, size = 5000),
-                   weight = exp(rnorm(5000, 3, 1)), total_hooks_pots = rnorm(5000, 100, 10),
-                   year = sample(factor(seq(1995:2020)), replace = TRUE, size = 5000))
+data <- data.frame(doy = rpois(1500, 150), AdjLon = rgamma(1500, 5, 3),
+                   lat2 = rgamma(1500, 10, 5), bottom_depth = rgamma(1500, 1500, 10),
+                   gear_descrip = sample(factor(c("LONGLINER", "POT")), replace = TRUE, size = 1500),
+                   area = sample(c("a", "b", "c", replace = TRUE, size = 1500)),
+                   type = sample(factor(c("observer", "logbook")), replace = TRUE, size = 1500),
+                   weight = exp(rnorm(1500, 3, 1)), total_hooks_pots = rnorm(1500, 100, 10),
+                   year = sample(factor(seq(1995:2020)), replace = TRUE, size = 1500))
 
 # Variables that are considered
 possible_variables <- c("s(doy)", "te(AdjLon,lat2, bs = c('tp', 'tp'))", "s(bottom_depth)",
