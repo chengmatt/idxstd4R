@@ -1,7 +1,7 @@
 #' Extracts metrics from 5-fold cross validated models
 #'
 #' @param variables A vector of variables we want to consider
-#' @param modeL_boject The model object we want to extract metrics from
+#' @param model_object The model object we want to extract metrics from
 #' @param data: A dataframe of the data you want to use
 #' @param dir.models: The directory to your output folder
 #' @param metric_filename: The filename you want to give to your output object (metrics of CV; i.e., RMSE, MAE, R2)
