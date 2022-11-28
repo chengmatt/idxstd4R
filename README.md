@@ -5,3 +5,4 @@ The function depends on rsample, mgcv, doMC, and a variety of other tools. To in
 ```
 devtools::install_github("chengmatt/idxstd4R")
 ```
+Please see the examples folder for a genearl tutorial on how to implement tensor product smooths and offsets within idxstd4R. 
