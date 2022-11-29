@@ -3,25 +3,28 @@
 #' @param variables A vector of variables we want to consider
 #' @param model_object The model object we want to extract metrics from
 #' @param data: A dataframe of the data you want to use
-#' @param dir.models: The directory to your output folder
-#' @param metric_filename: The filename you want to give to your output object (metrics of CV; i.e., RMSE, MAE, R2)
+#' @param dir.models The directory to your output folder
+#' @param metric_filename The filename you want to give to your output object (metrics of CV; i.e., RMSE, MAE, R2)
+#' @param folds Number of fold we want to extract metrics out of
+#' @param seed Seed used for k_fold_cv function for random splits
 #'
 #' @return CSVs of out-of-sample metrics derived from the 5-fold cross validation process
 #' @export
 #'
 #' @examples
-#' # Load in 5 fold CV model object
+#' # Load in k fold CV model object
 #' load(file.path(dir.mod.output, "cpue_stand_5foldcv.RData"))
 #'
-#' # Extract 5 fold CV metrics here
+#' # Extract k fold CV metrics here
 #' extract_metrics_5foldcv(variables = possible_variables,
 #'                         model_object = cpue_stand_5foldcv,
 #'                         data = data,
 #'                         dir.models = dir.mod.output,
-#'                         metric_filename =  "allgear_cv_metrics.csv")
+#'                         metric_filename =  "allgear_cv_metrics.csv",
+#'                         folds = 5, seed = 666)
 #'
-extract_5fold_metrics <- function(variables, model_object, data,
-                                    dir.models, metric_filename) {
+extract_kfold_metrics <- function(variables, model_object, data,
+                                    dir.models, metric_filename, folds, seed) {
 
   require(rsample)
   require(yardstick)
@@ -43,13 +46,16 @@ extract_5fold_metrics <- function(variables, model_object, data,
   log_obs_em <- data
 
   # Create random splits here
-  set.seed(123)
-  folds <- rsample::vfold_cv(log_obs_em, v = 5)
+  set.seed(seed)
+  k_folds <- rsample::vfold_cv(log_obs_em, v = folds)
 
   # Next, put these samples in a list, so we can re-use our previous workflow...
-  folds <- list(folds$splits[[1]]$in_id, folds$splits[[2]]$in_id,
-                folds$splits[[3]]$in_id, folds$splits[[4]]$in_id,
-                folds$splits[[5]]$in_id)
+  folds <- list()
+
+  # Loop through to put k folds into the folds list
+  for(i in 1:length(k_folds)) {
+    folds[[i]] <- k_folds$splits[[i]]$in_id
+  }
 
   # Create dataframe to store CV metrics in
   cv_results_random <- data.frame(matrix(data = NA, nrow = 15, length(variables)),

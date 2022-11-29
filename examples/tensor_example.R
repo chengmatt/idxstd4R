@@ -34,6 +34,7 @@ control_variables <- "weight ~ year + offset(log(total_hooks_pots)) + type + gea
 
 # Above are our control variables that are meant to be included in all model variants
 
+
 # CPUE standardization process --------------------------------------------
 
 # Now, call our CPUE standardization function
@@ -51,16 +52,21 @@ extract_insample_metrics(variables = possible_variables, model_object = models_s
                          dir.models = dir.out, metrics_ic_path = "insample.csv",
                          year_coeffs_path = "year.csv")
 
+
 # Five fold cross validation ----------------------------------------------
 
-five_foldCV(data = data, variables = possible_variables, control_variables = control_variables,
+# Note that the seed has to be the same for the k_foldCV function and the extract metrics function
+k_foldCV(data = data, variables = possible_variables, control_variables = control_variables,
             dir.models = dir.out, model_filename = "test_5fold.RData", error_dist = tw(link = "log"),
-            stand_type = "gam", seed = 123)
+            stand_type = "gam", seed = 123, folds = 5)
 
 # Load in 5 fold cross validated model objects - these are called all_mods_cv_random
 load(here(dir.out, "test_5fold.RData"))
 
+
 # Extract 5 fold cv metrics from the above --------------------------------
 
-extract_5fold_metrics(variables = possible_variables, model_object = all_mods_cv_random,
-                        data = data, metric_filename = "5foldcv.csv", dir.models = dir.out)
+# Note that the seed has to be the same for the k_foldCV function and the extract metrics function
+extract_kfold_metrics(variables = possible_variables, model_object = all_mods_cv_random,
+                        data = data, metric_filename = "5foldcv.csv", dir.models = dir.out,
+                        seed = 123, folds = 5)

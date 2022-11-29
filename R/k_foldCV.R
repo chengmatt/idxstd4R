@@ -1,4 +1,4 @@
-#' Conducts 5-fold cross validation for cpue_standardization models
+#' Conducts k-fold cross validation for cpue_standardization models
 #'
 #' @param variables A vector of variables we want to consider
 #' @param control_variables A formula in character form that species the response, as a function
@@ -8,7 +8,8 @@
 #' @param model_filename: The filename you want to give to your output object
 #' @param error_dist: The error distribution you want to use for your standardization model. The default is a Tweedie Distribution.
 #' @param stand_type: CPUE standardization model type. The default is to use mgcv to employ GAMs. Another option is to use GLMs
-#' @param seed: Set.seed for 5-fold cross validation
+#' @param seed: Set seed for k fold random splits
+#' @param folds: Number of folds you want to conduct
 #'
 #' @return A list object of 5-fold cross validated standardized CPUE models. This object is called all_mods_cv_random
 #' @export
@@ -25,13 +26,13 @@
 #' control_variables <- "weight ~ -1 + year + vessel_length_factor + offset(log(total_hooks_pots)) + type + gear_descrip +"
 #'
 #' # Run function here!
-#' five_foldCV(variables = possible_variables, control_variables = control_variables,
+#' k_foldCV(variables = possible_variables, control_variables = control_variables,
 #' data = data, dir.models = dir.mod.output, model_filename = "cpue_standardization_5foldCV.RData",
-#' error_dist = tw(link = "log"))
+#' error_dist = tw(link = "log"), folds = 5)
 
-five_foldCV <- function(data, variables, control_variables, dir.models,
+k_foldCV <- function(data, variables, control_variables, dir.models,
                         model_filename, error_dist = tw(link = "log"), stand_type = "gam",
-                        seed = 666) {
+                        seed = 666, folds = 5) {
 
   require(tidyverse)
   require(here)
@@ -49,12 +50,15 @@ five_foldCV <- function(data, variables, control_variables, dir.models,
 
   # Create random splits here
   set.seed(seed)
-  folds <- rsample::vfold_cv(log_obs_em, v = 5)
+  k_folds <- rsample::vfold_cv(log_obs_em, v = folds)
 
   # Next, put these samples in a list, so we can re-use our previous workflow...
-  folds <- list(folds$splits[[1]]$in_id, folds$splits[[2]]$in_id,
-                folds$splits[[3]]$in_id, folds$splits[[4]]$in_id,
-                folds$splits[[5]]$in_id)
+  folds <- list()
+
+  # Loop through to put k folds into the folds list
+  for(i in 1:length(k_folds)) {
+    folds[[i]] <- k_folds$splits[[i]]$in_id
+  }
 
   # Vector to store variable combinations
   possible_variables <- variables
