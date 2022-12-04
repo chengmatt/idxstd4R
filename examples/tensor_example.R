@@ -23,11 +23,14 @@ data <- data.frame(doy = rpois(1500, 150), AdjLon = rgamma(1500, 5, 3),
                    year = sample(factor(seq(1995:2020)), replace = TRUE, size = 1500))
 
 # Variables that are considered
-possible_variables <- c("s(doy)", "te(AdjLon,lat2, bs = c('tp', 'tp'))", "s(bottom_depth)",
+possible_variables <- c("s(doy, bs = 'cc')", "te(AdjLon,lat2, bs = c('tp', 'tp'))", "s(bottom_depth)",
                         "te(AdjLon, lat2, by = gear_descrip, bs = c('tp', 'tp'))", "area")
 
-# Here, we are considering a day of year effect, a tensor product smooth (average spatial field),
-# bottom depth, tensor product smooth with gear specific catchabilities, and fishery management areas
+# s(doy, bs = 'cc') = smooth effect of day of year with a cyclic spline
+# te(AdjLon,lat2, bs = c('tp', 'tp')) = tensor product smooth of lat and lon (avg spatial field)
+# s(bottom_depth) = smooth effect of bottom depth as a thin plate spline
+# te(AdjLon, lat2, by = gear_descrip, bs = c('tp', 'tp')) = tensor product smooth of lat and lon,
+# estiamting independent spatial fields for each independent gear type.
 
 # Variables that we know impact catchability
 control_variables <- "weight ~ year + offset(log(total_hooks_pots)) + type + gear_descrip +"
